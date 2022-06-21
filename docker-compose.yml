@@ -1,0 +1,86 @@
+version: '2.1'
+
+services:
+  #Besu 1
+  node1:
+    user: root
+    container_name: besu-nodes-1
+    volumes:
+      - ./networkFiles/keys/0x0b3f5d3594460f67cf0cb0ae001faf13d1360660/:/var/lib/node/data/
+      - ./config:/var/lib/besu
+    image: hyperledger/besu:latest
+    command:
+      --config-file=/var/lib/besu/config.toml
+      --privacy-enabled=true
+      --network-id 123
+    ports:
+      - "8545:8545"
+      - "8546:8549"
+    networks:
+      besu:
+        ipv4_address: 172.16.1.30
+
+    #Besu 2
+  node2:
+    container_name: besu-nodes-2
+    volumes:
+      - ./networkFiles/keys/0x6e3aa1e0f16091e0c575686cc773de2834e429fd/:/var/lib/node/data/
+      - ./config:/var/lib/besu
+    image: hyperledger/besu:latest
+    command:
+      --config-file=/var/lib/besu/config.toml
+      --network-id 123
+      --privacy-enabled=true
+      --bootnodes="enode://70b37a01797c91278ff1be258f3a8cf6cbbea84de4f51396b6d72982f99043db190f44a520eb3b0aa698f411e1207df4b4fe4591f8ad04e0563033f0c9e0249a@172.16.1.30:30000"
+    ports:
+      - "8547:8545"
+    networks:
+      besu:
+        ipv4_address: 172.16.1.31
+
+
+  #Besu 3
+  node3:
+    container_name: besu-nodes-3
+    volumes:
+      - ./networkFiles/keys/0xa5bcb6d68e61c030c6c0f397d905c389fb454710/:/var/lib/node/data/
+      - ./config:/var/lib/besu
+    image: hyperledger/besu:latest
+    command:
+      --config-file=/var/lib/besu/config.toml
+      --network-id 123
+      --privacy-enabled=true
+      --bootnodes="enode://70b37a01797c91278ff1be258f3a8cf6cbbea84de4f51396b6d72982f99043db190f44a520eb3b0aa698f411e1207df4b4fe4591f8ad04e0563033f0c9e0249a@172.16.1.30:30000"
+    ports:
+      - "8548:8545"
+    networks:
+      besu:
+        ipv4_address: 172.16.1.32
+
+  #Besu 4
+  node4:
+    container_name: besu-nodes-4
+    volumes:
+      - ./networkFiles/keys/0xe9db1630c9bd3e98c186f5c578c515515e5e3725/:/var/lib/node/data/
+      - ./config:/var/lib/besu
+    image: hyperledger/besu:latest
+    command:
+      --config-file=/var/lib/besu/config.toml
+      --network-id 123
+      --privacy-enabled=true
+      --bootnodes="enode://70b37a01797c91278ff1be258f3a8cf6cbbea84de4f51396b6d72982f99043db190f44a520eb3b0aa698f411e1207df4b4fe4591f8ad04e0563033f0c9e0249a@172.16.1.30:30000"
+    ports:
+      - "8549:8545"
+    networks:
+      besu:
+        ipv4_address: 172.16.1.33
+
+
+# Network
+networks:
+  besu:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.1.1/24
+          gateway: 172.16.1.1
